@@ -12,9 +12,8 @@ type PageVariables struct {
 }
 
 func IndexPage(w http.ResponseWriter, r *http.Request){
-    ip := getMyIp()
     IndexPageVars := PageVariables{ //store the page variables in a struct
-      Ip: ip,
+      Ip: getMyIp(),
     }
     t, err := template.ParseFiles("templates/index.html")
     err = t.Execute(w, IndexPageVars)
@@ -29,7 +28,7 @@ func getMyIp() string {
         panic(err)
     }
     for _, address := range addrs {
-        // if the addess is not loopback, return it
+        // if the address is not loopback, return it
         if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
             if ipnet.IP.To4() != nil {
                 return ipnet.IP.String()
