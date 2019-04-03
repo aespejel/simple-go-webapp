@@ -1,0 +1,10 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: go-webapp
+spec:
+        #minAvailable: 5
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      run: go-webapp

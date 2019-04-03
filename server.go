@@ -5,10 +5,24 @@ import (
     "net/http"
     "net"
     "log"
+    "time"
+    "os"
+    "fmt"
+    "strconv"
 )
 
 type PageVariables struct {
 	Ip         string
+}
+
+func DelayStartup() {
+    if startup_delay, ok := os.LookupEnv("STARTUP_DELAY"); ok {
+        startup_delay_int, err := strconv.Atoi(startup_delay)
+        if err != nil {
+            panic(fmt.Sprintf("STARTUP_DELAY environmental variable is not a number"))
+        }
+        time.Sleep(time.Duration(startup_delay_int) * time.Second)
+    }
 }
 
 func IndexPage(w http.ResponseWriter, r *http.Request){
@@ -39,6 +53,7 @@ func getMyIp() string {
 }
 
 func main() {
+    DelayStartup()
     http.HandleFunc("/", IndexPage)
     log.Fatal(http.ListenAndServe(":8080", nil))
 }
